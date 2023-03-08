@@ -1,0 +1,34 @@
+server:
+  port: ${server.port}
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import: classpath:/env.yml
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: ${db.rds.url}
+    username: ${db.rds.user}
+    password: ${db.rds.pw}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ${db.redis.host}
+    port: ${db.redis.port}
+    database: ${db.redis.database}
+logging:
+  level:
+    web: DEBUG
+  org:
+    hibernate:
+      SQL: DEBUG
+      type:
+        descriptor:
+          BasicBinder: TRACE
