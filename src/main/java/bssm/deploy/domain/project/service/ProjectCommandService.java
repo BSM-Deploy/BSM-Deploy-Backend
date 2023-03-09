@@ -1,9 +1,9 @@
-package bssm.deploy.domain.deploy.service;
+package bssm.deploy.domain.project.service;
 
 import java.io.File;
 import java.io.IOException;
 
-public interface DeployCommandService {
+public interface ProjectCommandService {
 
     void extractZipFile(File fromZipFile, File toDir) throws IOException;
 

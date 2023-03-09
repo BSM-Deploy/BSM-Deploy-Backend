@@ -1,4 +1,4 @@
-package bssm.deploy.domain.deploy.service;
+package bssm.deploy.domain.project.service;
 
 import org.springframework.stereotype.Service;
 
@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Service
-public class LinuxDeployCommandService implements DeployCommandService {
+public class LinuxProjectCommandService implements ProjectCommandService {
 
     public void extractZipFile(File fromZipFile, File toDir) throws IOException {
         ProcessBuilder builder = new ProcessBuilder();
