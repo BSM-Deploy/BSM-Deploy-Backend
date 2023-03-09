@@ -1,14 +1,15 @@
 package bssm.deploy.domain.project.presentaion;
 
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
+import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
 import bssm.deploy.domain.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("deploy")
@@ -23,4 +24,9 @@ public class ProjectController {
         deployService.createProject(req);
     }
 
+    @Operation(summary = "프로젝트 파일 업로드")
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void uploadProject(@ModelAttribute UploadProjectReq req) throws IOException {
+        deployService.uploadProject(req);
+    }
 }

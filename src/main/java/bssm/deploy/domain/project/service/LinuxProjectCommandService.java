@@ -11,7 +11,7 @@ public class LinuxProjectCommandService implements ProjectCommandService {
     public void extractZipFile(File fromZipFile, File toDir) throws IOException {
         ProcessBuilder builder = new ProcessBuilder();
         builder.directory(toDir);
-        builder.command("unzip", fromZipFile.getName(), "-d", "./");
+        builder.command("unzip", fromZipFile.getAbsolutePath(), "-d", "./");
         builder.start();
     }
 
@@ -19,6 +19,12 @@ public class LinuxProjectCommandService implements ProjectCommandService {
         ProcessBuilder builder = new ProcessBuilder();
         builder.directory(dir);
         builder.command("rm", "-rf", "./");
+        builder.start();
+    }
+
+    public void moveFile(File from, File to) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.command("mv", from.getAbsolutePath(), to.getAbsolutePath());
         builder.start();
     }
 }

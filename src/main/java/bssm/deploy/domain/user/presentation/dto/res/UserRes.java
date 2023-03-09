@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRes {
 
-    @Schema(description = "유저 식별 id")
+    @Schema(title = "유저 식별 id")
     private Long id;
 
-    @Schema(description = "닉네임")
+    @Schema(title = "닉네임")
     private String nickname;
 
-    @Schema(description = "프로필 사진 url", nullable = true)
+    @Schema(title = "프로필 사진 url", nullable = true)
     private String profileImg;
 
     public static UserRes create(User user) {

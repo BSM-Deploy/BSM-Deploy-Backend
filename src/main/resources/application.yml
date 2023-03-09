@@ -1,5 +1,7 @@
 server:
   port: ${server.port}
+  servlet:
+    contextPath: /api
 spring:
   main:
     allow-bean-definition-overriding: true
