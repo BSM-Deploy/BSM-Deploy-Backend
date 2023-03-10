@@ -44,7 +44,7 @@ public class DeployService {
             deployMultipleFile(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            throw new InternalServerException();
+            deployReactJs(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
             throw new InternalServerException();
@@ -57,6 +57,10 @@ public class DeployService {
     }
 
     private void deployMultipleFile(Long projectId, String domainPrefix) throws IOException {
+        deployCommandService.deployMultipleFile(projectId, domainPrefix);
+    }
+
+    private void deployReactJs(Long projectId, String domainPrefix) throws IOException {
         deployCommandService.deployMultipleFile(projectId, domainPrefix);
     }
 

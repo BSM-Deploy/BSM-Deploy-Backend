@@ -28,4 +28,11 @@ public class LinuxDeployCommandService implements DeployCommandService {
         builder.start();
     }
 
+    public void deployReactJs(long projectId, String domainPrefix) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File(SCRIPT_BASE_PATH));
+        builder.command("sh", DEPLOY_REACT_JS, String.valueOf(projectId), domainPrefix);
+        builder.start();
+    }
+
 }

@@ -22,6 +22,7 @@ public class ProcessProjectFileService {
             return processMultipleFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
+            return processReactJsFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
         }
@@ -35,6 +36,11 @@ public class ProcessProjectFileService {
     }
 
     private File processMultipleFile(File tempProjectZipFile, File projectDir) throws IOException {
+        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
+        return projectDir;
+    }
+
+    private File processReactJsFile(File tempProjectZipFile, File projectDir) throws IOException {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
