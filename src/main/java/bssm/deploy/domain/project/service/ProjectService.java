@@ -11,6 +11,7 @@ import bssm.deploy.global.dto.ListRes;
 import bssm.deploy.global.error.exceptions.FileUploadException;
 import bssm.deploy.global.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class ProjectService {
         file.transferTo(tempProjectFile);
 
         File projectFile = processProjectFileService.processProjectFile(tempProjectFile, projectDir, project.getProjectType());
-        project.setDataSize(getProjectDataSize(projectFile));
+        project.setDataSize(FileUtils.sizeOfDirectory(projectFile));
     }
 
     private File createProjectDir(String path) {
@@ -79,9 +80,5 @@ public class ProjectService {
             }
         }
         return dir;
-    }
-
-    private long getProjectDataSize(File projectFile) {
-        return projectFile.length();
     }
 }

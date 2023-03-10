@@ -41,7 +41,7 @@ public class DeployService {
             deploySingleHtmlFile(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            throw new InternalServerException();
+            deployMultipleFile(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
             throw new InternalServerException();
@@ -54,6 +54,10 @@ public class DeployService {
 
     private void deploySingleHtmlFile(Long projectId, String domainPrefix) throws IOException {
         deployCommandService.deploySingleHtml(projectId, domainPrefix);
+    }
+
+    private void deployMultipleFile(Long projectId, String domainPrefix) throws IOException {
+        deployCommandService.deployMultipleFile(projectId, domainPrefix);
     }
 
 }

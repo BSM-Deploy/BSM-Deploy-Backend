@@ -21,15 +21,15 @@ public class ProjectFileValidateService {
             return;
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            validateSingleHtml(file);
+            validateMultipleHtml(file);
             return;
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            validateSingleHtml(file);
+            validateBuiltReactJs(file);
             return;
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            validateSingleHtml(file);
+            validateBuiltNextJs(file);
             return;
         }
         throw new InternalServerException();

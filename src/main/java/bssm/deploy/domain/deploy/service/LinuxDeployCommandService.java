@@ -21,4 +21,11 @@ public class LinuxDeployCommandService implements DeployCommandService {
         builder.start();
     }
 
+    public void deployMultipleFile(long projectId, String domainPrefix) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File(SCRIPT_BASE_PATH));
+        builder.command("sh", DEPLOY_MULTIPLE_FILE, String.valueOf(projectId), domainPrefix);
+        builder.start();
+    }
+
 }

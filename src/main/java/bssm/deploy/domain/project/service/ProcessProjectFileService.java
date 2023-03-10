@@ -19,6 +19,7 @@ public class ProcessProjectFileService {
             return processSingleHtmlFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
+            return processMultipleFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
         }
@@ -31,5 +32,10 @@ public class ProcessProjectFileService {
         File newFile = new File(projectDir.getAbsoluteFile() + "/index.html");
         projectCommandService.moveFile(tempProjectFile, newFile);
         return newFile;
+    }
+
+    private File processMultipleFile(File tempProjectZipFile, File projectDir) throws IOException {
+        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
+        return projectDir;
     }
 }
