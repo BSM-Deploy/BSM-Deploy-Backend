@@ -51,4 +51,8 @@ public class Project {
     public void setDeploy(boolean deploy) {
         isDeploy = deploy;
     }
+
+    public void setDataSize(long dataSize) {
+        this.dataSize = dataSize;
+    }
 }

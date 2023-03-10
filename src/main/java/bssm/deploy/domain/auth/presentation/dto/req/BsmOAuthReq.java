@@ -8,7 +8,7 @@ import lombok.Getter;
 public class BsmOAuthReq {
 
     @NotEmpty
-    @Schema(title = "BSM OAuth 인증 코드")
+    @Schema(description = "BSM OAuth 인증 코드")
     private String code;
 
 }

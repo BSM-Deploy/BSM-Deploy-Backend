@@ -8,10 +8,10 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthTokenRes {
 
-    @Schema(title = "액세스 토큰")
+    @Schema(description = "액세스 토큰")
     private String accessToken;
 
-    @Schema(title = "리프레시 토큰")
+    @Schema(description = "리프레시 토큰")
     private String refreshToken;
 
     public static AuthTokenRes create(String accessToken, String refreshToken) {

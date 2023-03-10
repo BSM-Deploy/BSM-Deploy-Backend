@@ -14,28 +14,22 @@ public class ProcessProjectFileService {
 
     private final LinuxProjectCommandService projectCommandService;
 
-    public void processProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws IOException {
+    public File processProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws IOException {
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            processSingleHtmlFile(tempProjectFile, projectDir);
-            return;
+            return processSingleHtmlFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-
-            return;
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-
-            return;
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-
-            return;
         }
         throw new InternalServerException();
     }
 
-    private void processSingleHtmlFile(File tempProjectFile, File projectDir) throws IOException {
+    private File processSingleHtmlFile(File tempProjectFile, File projectDir) throws IOException {
         File newFile = new File(projectDir.getAbsoluteFile() + "/index.html");
         projectCommandService.moveFile(tempProjectFile, newFile);
+        return newFile;
     }
 }
