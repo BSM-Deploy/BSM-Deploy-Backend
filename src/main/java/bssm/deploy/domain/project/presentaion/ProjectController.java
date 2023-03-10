@@ -4,6 +4,7 @@ import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
 import bssm.deploy.domain.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -11,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+@Tag(name = "프로젝트")
 @RestController
-@RequestMapping("deploy")
+@RequestMapping("project")
 @RequiredArgsConstructor
 public class ProjectController {
 

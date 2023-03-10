@@ -48,4 +48,7 @@ public class Project {
         return project;
     }
 
+    public void setDeploy(boolean deploy) {
+        isDeploy = deploy;
+    }
 }
