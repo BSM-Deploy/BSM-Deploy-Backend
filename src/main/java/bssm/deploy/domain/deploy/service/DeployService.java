@@ -61,7 +61,7 @@ public class DeployService {
     }
 
     private void deployReactJs(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployMultipleFile(projectId, domainPrefix);
+        deployCommandService.deployReactJs(projectId, domainPrefix);
     }
 
 }

@@ -1,6 +1,8 @@
 package bssm.deploy.domain.deploy.presentation;
 
+import bssm.deploy.domain.deploy.presentation.dto.req.CancelDeployProjectReq;
 import bssm.deploy.domain.deploy.presentation.dto.req.DeployProjectReq;
+import bssm.deploy.domain.deploy.service.CancelDeployService;
 import bssm.deploy.domain.deploy.service.DeployService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,10 +19,17 @@ import java.io.IOException;
 public class DeployController {
 
     private final DeployService deployService;
+    private final CancelDeployService cancelDeployService;
 
     @Operation(summary = "배포 하기")
-    @PostMapping
-    public void createProject(@Valid @RequestBody DeployProjectReq req) throws IOException {
+    @PutMapping
+    public void deployProject(@Valid @RequestBody DeployProjectReq req) throws IOException {
         deployService.deployProject(req);
+    }
+
+    @Operation(summary = "배포 취소하기")
+    @PutMapping("cancel")
+    public void cancelDeployProject(@Valid @RequestBody CancelDeployProjectReq req) throws IOException {
+        cancelDeployService.cancelDeployProject(req);
     }
 }
