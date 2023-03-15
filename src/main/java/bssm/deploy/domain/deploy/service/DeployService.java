@@ -2,25 +2,14 @@ package bssm.deploy.domain.deploy.service;
 
 import bssm.deploy.domain.deploy.presentation.dto.req.DeployProjectReq;
 import bssm.deploy.domain.project.domain.Project;
-import bssm.deploy.domain.project.domain.repository.ProjectRepository;
 import bssm.deploy.domain.project.domain.type.ProjectType;
-import bssm.deploy.domain.project.exception.AlreadyExistDomainPrefixException;
-import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
-import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
-import bssm.deploy.domain.project.service.ProcessProjectFileService;
-import bssm.deploy.domain.project.service.ProjectFileValidateService;
 import bssm.deploy.domain.project.service.ProjectProvider;
 import bssm.deploy.global.auth.CurrentUser;
-import bssm.deploy.global.error.exceptions.FileUploadException;
 import bssm.deploy.global.error.exceptions.InternalServerException;
-import bssm.deploy.global.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -47,7 +36,7 @@ public class DeployService {
             deployReactJs(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            throw new InternalServerException();
+            deployNextJs(project.getId(), project.getDomainPrefix());
         }
         project.setDeploy(true);
     }
@@ -62,6 +51,10 @@ public class DeployService {
 
     private void deployReactJs(Long projectId, String domainPrefix) throws IOException {
         deployCommandService.deployReactJs(projectId, domainPrefix);
+    }
+
+    private void deployNextJs(Long projectId, String domainPrefix) throws IOException {
+        deployCommandService.deployNextJs(projectId, domainPrefix);
     }
 
 }

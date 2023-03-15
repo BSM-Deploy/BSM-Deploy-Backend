@@ -28,7 +28,7 @@ public class ProjectController {
         projectService.createProject(req);
     }
 
-    @Operation(summary = "프로젝트 파일 업로드")
+    @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, 나머지는 압축된 zip 파일")
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public void uploadProject(@ModelAttribute UploadProjectReq req) throws IOException {
         projectService.uploadProject(req);

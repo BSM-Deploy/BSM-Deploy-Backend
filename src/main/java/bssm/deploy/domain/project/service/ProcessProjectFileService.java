@@ -25,6 +25,7 @@ public class ProcessProjectFileService {
             return processReactJsFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
+            return processNextJsFile(tempProjectFile, projectDir);
         }
         throw new InternalServerException();
     }
@@ -41,6 +42,11 @@ public class ProcessProjectFileService {
     }
 
     private File processReactJsFile(File tempProjectZipFile, File projectDir) throws IOException {
+        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
+        return projectDir;
+    }
+
+    private File processNextJsFile(File tempProjectZipFile, File projectDir) throws IOException {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
