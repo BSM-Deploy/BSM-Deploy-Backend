@@ -38,7 +38,7 @@ public class CancelDeployService {
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
             throw new InternalServerException();
         }
-        project.setDeploy(true);
+        project.setDeploy(false);
     }
 
     private void cancelDeploySingleHtmlFile(Long projectId) throws IOException {

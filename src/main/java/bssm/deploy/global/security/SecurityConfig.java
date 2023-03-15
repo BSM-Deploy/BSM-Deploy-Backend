@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/oauth/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/auth/token/refresh").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/auth/logout").permitAll()
                 .anyRequest().authenticated();
         http
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
