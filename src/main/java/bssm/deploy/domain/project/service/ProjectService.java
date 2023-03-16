@@ -46,12 +46,13 @@ public class ProjectService {
     }
 
     @Transactional
-    public void createProject(CreateProjectReq req) {
+    public ProjectRes createProject(CreateProjectReq req) {
         if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())) {
             throw new AlreadyExistDomainPrefixException();
         }
         Project project = Project.create(currentUser.getUser(), req.getName(), req.getDomainPrefix(), req.getProjectType());
-        projectRepository.save(project);
+        project = projectRepository.save(project);
+        return ProjectRes.create(project);
     }
 
     @Transactional

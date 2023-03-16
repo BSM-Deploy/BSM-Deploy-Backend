@@ -24,8 +24,8 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 생성")
     @PostMapping
-    public void createProject(@Valid @RequestBody CreateProjectReq req) {
-        projectService.createProject(req);
+    public ProjectRes createProject(@Valid @RequestBody CreateProjectReq req) {
+        return projectService.createProject(req);
     }
 
     @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, 나머지는 압축된 zip 파일")
