@@ -12,8 +12,8 @@ public class CreateProjectReq {
     @NotBlank
     private String name;
 
-    @Schema(description = "도메인 접두사")
-    @NotBlank
+    @Schema(description = "도메인 접두사", defaultValue = "string")
+    @Pattern(regexp = "^[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*$")
     private String domainPrefix;
 
     @Schema(description = "프로젝트 파일 형식")

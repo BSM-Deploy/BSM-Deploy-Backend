@@ -2,6 +2,7 @@ package bssm.deploy.domain.project.service;
 
 import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.repository.ProjectRepository;
+import bssm.deploy.domain.project.domain.repository.ReservedDomainPrefixRepository;
 import bssm.deploy.domain.project.exception.AlreadyExistDomainPrefixException;
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
@@ -32,6 +33,7 @@ public class ProjectService {
     private final ProcessProjectFileService processProjectFileService;
 
     private final ProjectRepository projectRepository;
+    private final ReservedDomainPrefixRepository reservedDomainPrefixRepository;
 
     @Value("${bsm-deploy.project-path.base}")
     private String PROJECT_BASE_RESOURCE_PATH;
@@ -47,7 +49,8 @@ public class ProjectService {
 
     @Transactional
     public ProjectRes createProject(CreateProjectReq req) {
-        if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())) {
+        if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())
+                || reservedDomainPrefixRepository.existsById(req.getDomainPrefix())) {
             throw new AlreadyExistDomainPrefixException();
         }
         Project project = Project.create(currentUser.getUser(), req.getName(), req.getDomainPrefix(), req.getProjectType());
