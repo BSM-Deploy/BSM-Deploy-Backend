@@ -17,7 +17,12 @@ public class ProjectProvider {
 
     private final ProjectRepository projectRepository;
 
-    public Project findProject(long id, User user) {
+    public Project findById(long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(NoSuchProjectException::new);
+    }
+
+    public Project findByIdAndUser(long id, User user) {
         return projectRepository.findByIdAndUser(id, user)
                 .orElseThrow(NoSuchProjectException::new);
     }

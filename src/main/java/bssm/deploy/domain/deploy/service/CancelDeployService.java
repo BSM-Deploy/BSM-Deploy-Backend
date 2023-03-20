@@ -23,7 +23,7 @@ public class CancelDeployService {
 
     @Transactional
     public void cancelDeployProject(CancelDeployProjectReq req) throws IOException {
-        Project project = projectProvider.findProject(req.getProjectId(), currentUser.getUser());
+        Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
         ProjectType projectType = project.getProjectType();
 
         if (projectType.equals(ProjectType.SINGLE_HTML)) {

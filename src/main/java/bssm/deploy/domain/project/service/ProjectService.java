@@ -7,6 +7,7 @@ import bssm.deploy.domain.project.exception.AlreadyExistDomainPrefixException;
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
+import bssm.deploy.domain.user.domain.User;
 import bssm.deploy.global.auth.CurrentUser;
 import bssm.deploy.global.dto.ListRes;
 import bssm.deploy.global.error.exceptions.FileUploadException;
@@ -40,8 +41,15 @@ public class ProjectService {
     @Value("${bsm-deploy.project-path.temp}")
     private String PROJECT_TEMP_RESOURCE_PATH;
 
+    public ProjectRes findProject(Long projectId) {
+        User user = currentUser.getCachedUser();
+        Project project = projectProvider.findByIdAndUser(projectId, user);
+        return ProjectRes.create(project);
+    }
+
     public ListRes<ProjectRes> findProjectList() {
-        List<ProjectRes> projectResList = projectProvider.findProjectList(currentUser.getUser()).stream()
+        User user = currentUser.getCachedUser();
+        List<ProjectRes> projectResList = projectProvider.findProjectList(user).stream()
                 .map(ProjectRes::create)
                 .toList();
         return ListRes.create(projectResList);
@@ -62,7 +70,7 @@ public class ProjectService {
     public void uploadProject(UploadProjectReq req) throws IOException {
         createProjectDir(PROJECT_TEMP_RESOURCE_PATH);
         MultipartFile file = req.getFile();
-        Project project = projectProvider.findProject(req.getProjectId(), currentUser.getUser());
+        Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
         projectFileValidateService.validateFile(file, project.getProjectType());
 
         File projectDir = createProjectDir(PROJECT_BASE_RESOURCE_PATH + "/" + project.getId());
