@@ -35,4 +35,11 @@ public class LinuxCancelDeployCommandService implements CancelDeployCommandServi
         builder.start();
     }
 
+    public void cancelDeployNextJs(long projectId) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder();
+        builder.directory(new File(SCRIPT_BASE_PATH));
+        builder.command("sh", CANCEL_DEPLOY_NEXT_JS, String.valueOf(projectId));
+        builder.start();
+    }
+
 }

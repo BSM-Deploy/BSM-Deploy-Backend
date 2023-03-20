@@ -36,7 +36,7 @@ public class CancelDeployService {
             cancelDeployReactJs(project.getId());
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            throw new InternalServerException();
+            cancelDeployNextJs(project.getId());
         }
         project.setDeploy(false);
     }
@@ -51,6 +51,10 @@ public class CancelDeployService {
 
     private void cancelDeployReactJs(Long projectId) throws IOException {
         cancelDeployCommandService.cancelDeployMultipleFile(projectId);
+    }
+
+    private void cancelDeployNextJs(Long projectId) throws IOException {
+        cancelDeployCommandService.cancelDeployNextJs(projectId);
     }
 
 }
