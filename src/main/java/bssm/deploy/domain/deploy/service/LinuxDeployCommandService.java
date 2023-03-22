@@ -1,5 +1,9 @@
 package bssm.deploy.domain.deploy.service;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteWatchdog;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,32 +18,35 @@ public class LinuxDeployCommandService implements DeployCommandService {
     @Value("${bsm-deploy.script-path.base}")
     private String SCRIPT_BASE_PATH;
 
+    private static final long MAX_DEPLOY_TIME = 300_000;
+
     public void deploySingleHtml(long projectId, String domainPrefix) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", DEPLOY_SINGLE_HTML, String.valueOf(projectId), domainPrefix);
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_SINGLE_HTML + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
     public void deployMultipleFile(long projectId, String domainPrefix) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", DEPLOY_MULTIPLE_FILE, String.valueOf(projectId), domainPrefix);
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_MULTIPLE_FILE + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
     public void deployReactJs(long projectId, String domainPrefix) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", DEPLOY_REACT_JS, String.valueOf(projectId), domainPrefix);
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_REACT_JS + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
-    public void deployNextJs(long projectId, String domainPrefix) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", DEPLOY_NEXT_JS, String.valueOf(projectId), domainPrefix);
-        builder.start();
+    public void deployNextJsAsync(long projectId, String domainPrefix) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_NEXT_JS + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.setWatchdog(new ExecuteWatchdog(MAX_DEPLOY_TIME));
+        executor.execute(command, new DefaultExecuteResultHandler());
     }
 
 }

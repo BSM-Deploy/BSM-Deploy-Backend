@@ -1,5 +1,7 @@
 package bssm.deploy.domain.deploy.service;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,31 +17,31 @@ public class LinuxCancelDeployCommandService implements CancelDeployCommandServi
     private String SCRIPT_BASE_PATH;
 
     public void cancelDeploySingleHtml(long projectId) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", CANCEL_DEPLOY_SINGLE_HTML, String.valueOf(projectId));
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_SINGLE_HTML + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
     public void cancelDeployMultipleFile(long projectId) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", CANCEL_DEPLOY_MULTIPLE_FILE, String.valueOf(projectId));
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_MULTIPLE_FILE + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
     public void cancelDeployReactJs(long projectId) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", CANCEL_DEPLOY_REACT_JS, String.valueOf(projectId));
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_REACT_JS + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
     public void cancelDeployNextJs(long projectId) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder();
-        builder.directory(new File(SCRIPT_BASE_PATH));
-        builder.command("sh", CANCEL_DEPLOY_NEXT_JS, String.valueOf(projectId));
-        builder.start();
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_NEXT_JS + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
     }
 
 }
