@@ -1,6 +1,6 @@
 package bssm.deploy.domain.container.controller;
 
-import bssm.deploy.domain.container.service.ContainerLogService;
+import bssm.deploy.domain.container.service.ContainerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ContainerController {
 
-    private final ContainerLogService containerLogService;
+    private final ContainerService containerLogService;
 
     @Operation(summary = "컨테이너 로그 조회")
     @GetMapping("{projectId}/log")

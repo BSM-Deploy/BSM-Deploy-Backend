@@ -1,5 +1,6 @@
 package bssm.deploy.domain.project.domain;
 
+import bssm.deploy.domain.container.exception.NoSuchContainerException;
 import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.user.domain.User;
 import jakarta.persistence.*;
@@ -54,5 +55,12 @@ public class Project {
 
     public void setDataSize(long dataSize) {
         this.dataSize = dataSize;
+    }
+
+    public boolean checkContainerProject() {
+        if (ProjectType.BUILT_NEXT_JS == projectType) {
+            return true;
+        }
+        return false;
     }
 }

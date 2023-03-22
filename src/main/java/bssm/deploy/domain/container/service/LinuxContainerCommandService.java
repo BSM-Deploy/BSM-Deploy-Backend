@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import static bssm.deploy.domain.container.constant.ScriptFileConstant.*;
 
 @Service
-public class LinuxContainerLogCommandService implements ContainerLogCommandService {
+public class LinuxContainerCommandService implements ContainerCommandService {
 
     @Value("${bsm-deploy.script-path.base}")
     private String SCRIPT_BASE_PATH;
@@ -30,6 +30,13 @@ public class LinuxContainerLogCommandService implements ContainerLogCommandServi
             output += line + "\n";
         }
         return output;
+    }
+
+    public void rebuildContainer(long projectId) throws IOException {
+        ProcessBuilder pb = new ProcessBuilder();
+        pb.directory(new File(SCRIPT_BASE_PATH));
+        pb.command("sh", CONTAINER_REBUILD, String.valueOf(projectId));
+        pb.start();
     }
 
 }

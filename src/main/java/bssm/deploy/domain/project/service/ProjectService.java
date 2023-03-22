@@ -1,5 +1,6 @@
 package bssm.deploy.domain.project.service;
 
+import bssm.deploy.domain.container.service.ContainerBuildService;
 import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.repository.ProjectRepository;
 import bssm.deploy.domain.project.domain.repository.ReservedDomainPrefixRepository;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -32,6 +32,7 @@ public class ProjectService {
     private final ProjectProvider projectProvider;
     private final ProjectFileValidateService projectFileValidateService;
     private final ProcessProjectFileService processProjectFileService;
+    private final ContainerBuildService containerBuildService;
 
     private final ProjectRepository projectRepository;
     private final ReservedDomainPrefixRepository reservedDomainPrefixRepository;
@@ -57,20 +58,22 @@ public class ProjectService {
 
     @Transactional
     public ProjectRes createProject(CreateProjectReq req) {
+        User user = currentUser.getCachedUser();
         if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())
                 || reservedDomainPrefixRepository.existsById(req.getDomainPrefix())) {
             throw new AlreadyExistDomainPrefixException();
         }
-        Project project = Project.create(currentUser.getUser(), req.getName(), req.getDomainPrefix(), req.getProjectType());
+        Project project = Project.create(user, req.getName(), req.getDomainPrefix(), req.getProjectType());
         project = projectRepository.save(project);
         return ProjectRes.create(project);
     }
 
     @Transactional
-    public void uploadProject(UploadProjectReq req) throws IOException {
+    public void uploadProject(UploadProjectReq req) throws Exception {
+        User user = currentUser.getCachedUser();
         createProjectDir(PROJECT_TEMP_RESOURCE_PATH);
         MultipartFile file = req.getFile();
-        Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
+        Project project = projectProvider.findByIdAndUser(req.getProjectId(), user);
         projectFileValidateService.validateFile(file, project.getProjectType());
 
         File projectDir = createProjectDir(PROJECT_BASE_RESOURCE_PATH + "/" + project.getId());
@@ -79,6 +82,10 @@ public class ProjectService {
 
         File projectFile = processProjectFileService.processProjectFile(tempProjectFile, projectDir, project.getProjectType());
         project.setDataSize(FileUtils.sizeOfDirectory(projectFile));
+
+        if (project.checkContainerProject()) {
+            containerBuildService.rebuildContainer(project);
+        }
     }
 
     private File createProjectDir(String path) {

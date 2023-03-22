@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +13,7 @@ public class ProcessProjectFileService {
 
     private final LinuxProjectCommandService projectCommandService;
 
-    public File processProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws IOException {
+    public File processProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
             return processSingleHtmlFile(tempProjectFile, projectDir);
         }
@@ -30,23 +29,23 @@ public class ProcessProjectFileService {
         throw new InternalServerException();
     }
 
-    private File processSingleHtmlFile(File tempProjectFile, File projectDir) throws IOException {
+    private File processSingleHtmlFile(File tempProjectFile, File projectDir) throws Exception {
         File newFile = new File(projectDir.getAbsoluteFile() + "/index.html");
         projectCommandService.moveFile(tempProjectFile, newFile);
         return newFile;
     }
 
-    private File processMultipleFile(File tempProjectZipFile, File projectDir) throws IOException {
+    private File processMultipleFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
 
-    private File processReactJsFile(File tempProjectZipFile, File projectDir) throws IOException {
+    private File processReactJsFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
 
-    private File processNextJsFile(File tempProjectZipFile, File projectDir) throws IOException {
+    private File processNextJsFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }

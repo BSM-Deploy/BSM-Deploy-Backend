@@ -15,17 +15,17 @@ import java.io.IOException;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ContainerLogService {
+public class ContainerService {
 
     private final CurrentUser currentUser;
     private final ProjectProvider projectProvider;
-    private final LinuxContainerLogCommandService containerLogCommandService;
+    private final LinuxContainerCommandService containerCommandService;
 
     public String getContainerLog(Long projectId) throws IOException {
         User user = currentUser.getCachedUser();
         Project project = projectProvider.findByIdAndUser(projectId, user);
         validateContainerProject(project);
-        return containerLogCommandService.getContainerLog(projectId);
+        return containerCommandService.getContainerLog(projectId);
     }
 
     private void validateContainerProject(Project project) {

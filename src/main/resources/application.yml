@@ -7,6 +7,10 @@ spring:
     allow-bean-definition-overriding: true
   config:
     import: classpath:/env.yml
+  servlet:
+    multipart:
+      maxFileSize: ${file.upload-size}
+      maxRequestSize: ${file.upload-size}
   jpa:
     database: mysql
     show-sql: true
