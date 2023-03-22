@@ -1,52 +1,62 @@
 package bssm.deploy.domain.project.service;
 
+import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.global.error.exceptions.InternalServerException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 
 @Service
 @RequiredArgsConstructor
-public class ProcessProjectFileService {
+public class ProjectFileService {
 
     private final LinuxProjectCommandService projectCommandService;
 
-    public File processProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
+    @Value("${bsm-deploy.project-path.base}")
+    private String PROJECT_BASE_RESOURCE_PATH;
+
+    public File uploadProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            return processSingleHtmlFile(tempProjectFile, projectDir);
+            return uploadSingleHtmlFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            return processMultipleFile(tempProjectFile, projectDir);
+            return uploadMultipleFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            return processReactJsFile(tempProjectFile, projectDir);
+            return uploadReactJsFile(tempProjectFile, projectDir);
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            return processNextJsFile(tempProjectFile, projectDir);
+            return uploadNextJsFile(tempProjectFile, projectDir);
         }
         throw new InternalServerException();
     }
 
-    private File processSingleHtmlFile(File tempProjectFile, File projectDir) throws Exception {
+    private File uploadSingleHtmlFile(File tempProjectFile, File projectDir) throws Exception {
         File newFile = new File(projectDir.getAbsoluteFile() + "/index.html");
         projectCommandService.moveFile(tempProjectFile, newFile);
         return newFile;
     }
 
-    private File processMultipleFile(File tempProjectZipFile, File projectDir) throws Exception {
+    private File uploadMultipleFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
 
-    private File processReactJsFile(File tempProjectZipFile, File projectDir) throws Exception {
+    private File uploadReactJsFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
     }
 
-    private File processNextJsFile(File tempProjectZipFile, File projectDir) throws Exception {
+    private File uploadNextJsFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
         return projectDir;
+    }
+
+    public void deleteProjectFile(Project project) throws Exception {
+        File projectDir = new File(PROJECT_BASE_RESOURCE_PATH + "/" + project.getId());
+        projectCommandService.removeDir(projectDir);
     }
 }

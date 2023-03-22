@@ -20,6 +20,18 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+    @Operation(summary = "내 프로젝트 리스트 조회")
+    @GetMapping
+    public ListRes<ProjectRes> findProjectList() {
+        return projectService.findProjectList();
+    }
+
+    @Operation(summary = "내 프로젝트 단건 조회")
+    @GetMapping("{projectId}")
+    public ProjectRes findProject(@PathVariable Long projectId) {
+        return projectService.findProject(projectId);
+    }
+
     @Operation(summary = "프로젝트 생성")
     @PostMapping
     public ProjectRes createProject(@Valid @RequestBody CreateProjectReq req) {
@@ -32,15 +44,10 @@ public class ProjectController {
         projectService.uploadProject(req);
     }
 
-    @Operation(summary = "내 프로젝트 리스트 조회")
-    @GetMapping
-    public ListRes<ProjectRes> findProjectList() {
-        return projectService.findProjectList();
+    @Operation(summary = "프로젝트 삭제")
+    @DeleteMapping("{projectId}")
+    public void deleteProject(@PathVariable Long projectId) throws Exception {
+        projectService.deleteProject(projectId);
     }
 
-    @Operation(summary = "내 프로젝트 단건 조회")
-    @GetMapping("{projectId}")
-    public ProjectRes findProject(@PathVariable Long projectId) {
-        return projectService.findProject(projectId);
-    }
 }

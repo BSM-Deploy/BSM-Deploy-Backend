@@ -38,4 +38,8 @@ public class ContainerService {
         throw new NoSuchContainerException();
     }
 
+    public void removeContainer(Project project) throws IOException {
+        containerCommandService.removeContainer(project.getId());
+    }
+
 }

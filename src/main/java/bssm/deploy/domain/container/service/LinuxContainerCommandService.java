@@ -39,4 +39,11 @@ public class LinuxContainerCommandService implements ContainerCommandService {
         pb.start();
     }
 
+    public void removeContainer(long projectId) throws IOException {
+        ProcessBuilder pb = new ProcessBuilder();
+        pb.directory(new File(SCRIPT_BASE_PATH));
+        pb.command("sh", CONTAINER_REMOVE, String.valueOf(projectId));
+        pb.start();
+    }
+
 }

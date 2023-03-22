@@ -1,6 +1,9 @@
 package bssm.deploy.domain.project.service;
 
 import bssm.deploy.domain.container.service.ContainerBuildService;
+import bssm.deploy.domain.container.service.ContainerService;
+import bssm.deploy.domain.deploy.presentation.dto.req.CancelDeployProjectReq;
+import bssm.deploy.domain.deploy.service.CancelDeployService;
 import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.repository.ProjectRepository;
 import bssm.deploy.domain.project.domain.repository.ReservedDomainPrefixRepository;
@@ -31,8 +34,10 @@ public class ProjectService {
     private final CurrentUser currentUser;
     private final ProjectProvider projectProvider;
     private final ProjectFileValidateService projectFileValidateService;
-    private final ProcessProjectFileService processProjectFileService;
+    private final ProjectFileService processProjectFileService;
+    private final ContainerService containerService;
     private final ContainerBuildService containerBuildService;
+    private final CancelDeployService cancelDeployService;
 
     private final ProjectRepository projectRepository;
     private final ReservedDomainPrefixRepository reservedDomainPrefixRepository;
@@ -80,7 +85,7 @@ public class ProjectService {
         File tempProjectFile = new File(PROJECT_TEMP_RESOURCE_PATH + "/" + SecurityUtil.getRandomStr(16));
         file.transferTo(tempProjectFile);
 
-        File projectFile = processProjectFileService.processProjectFile(tempProjectFile, projectDir, project.getProjectType());
+        File projectFile = processProjectFileService.uploadProjectFile(tempProjectFile, projectDir, project.getProjectType());
         project.setDataSize(FileUtils.sizeOfDirectory(projectFile));
 
         if (project.checkContainerProject()) {
@@ -99,5 +104,16 @@ public class ProjectService {
             }
         }
         return dir;
+    }
+
+    @Transactional
+    public void deleteProject(Long projectId) throws Exception {
+        User user = currentUser.getCachedUser();
+        Project project = projectProvider.findByIdAndUser(projectId, user);
+
+        cancelDeployService.cancelDeployProject(CancelDeployProjectReq.ofProjectId(projectId));
+        containerService.removeContainer(project);
+        processProjectFileService.deleteProjectFile(project);
+        projectRepository.delete(project);
     }
 }

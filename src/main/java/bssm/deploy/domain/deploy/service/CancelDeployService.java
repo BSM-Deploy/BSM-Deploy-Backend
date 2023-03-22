@@ -5,7 +5,6 @@ import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.project.service.ProjectProvider;
 import bssm.deploy.global.auth.CurrentUser;
-import bssm.deploy.global.error.exceptions.InternalServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

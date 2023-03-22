@@ -11,4 +11,10 @@ public class CancelDeployProjectReq {
     @NotNull
     private Long projectId;
 
+    public static CancelDeployProjectReq ofProjectId(Long projectId) {
+        CancelDeployProjectReq req =  new CancelDeployProjectReq();
+        req.projectId = projectId;
+        return req;
+    }
+
 }
