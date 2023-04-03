@@ -10,7 +10,7 @@ import java.io.File;
 public class LinuxProjectCommandService implements ProjectCommandService {
 
     public void extractZipFile(File fromZipFile, File toDir) throws Exception {
-        CommandLine command = CommandLine.parse("unzip " + fromZipFile.getAbsolutePath() + " -d ./");
+        CommandLine command = CommandLine.parse("unzip -o " + fromZipFile.getAbsolutePath() + " -d ./");
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(toDir);
         executor.execute(command);
@@ -23,9 +23,8 @@ public class LinuxProjectCommandService implements ProjectCommandService {
     }
 
     public void moveFile(File from, File to) throws Exception {
-        CommandLine command = CommandLine.parse("mv . " + to.getAbsolutePath());
+        CommandLine command = CommandLine.parse("mv " + from.getAbsolutePath() + " " + to.getAbsolutePath());
         DefaultExecutor executor = new DefaultExecutor();
-        executor.setWorkingDirectory(from);
         executor.execute(command);
     }
 }

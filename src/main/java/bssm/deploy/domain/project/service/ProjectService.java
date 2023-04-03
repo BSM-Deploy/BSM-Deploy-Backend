@@ -85,8 +85,8 @@ public class ProjectService {
         File tempProjectFile = new File(PROJECT_TEMP_RESOURCE_PATH + "/" + SecurityUtil.getRandomStr(16));
         file.transferTo(tempProjectFile);
 
-        File projectFile = processProjectFileService.uploadProjectFile(tempProjectFile, projectDir, project.getProjectType());
-        project.setDataSize(FileUtils.sizeOfDirectory(projectFile));
+        processProjectFileService.uploadProjectFile(tempProjectFile, projectDir, project.getProjectType());
+        project.setDataSize(FileUtils.sizeOfDirectory(projectDir));
 
         if (project.checkContainerProject()) {
             containerBuildService.rebuildContainerAsync(project);
