@@ -58,9 +58,6 @@ public class Project {
     }
 
     public boolean checkContainerProject() {
-        if (ProjectType.BUILT_NEXT_JS == projectType) {
-            return true;
-        }
-        return false;
+        return ProjectType.BUILT_NEXT_JS == projectType;
     }
 }

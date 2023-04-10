@@ -111,8 +111,14 @@ public class ProjectService {
         User user = currentUser.getCachedUser();
         Project project = projectProvider.findByIdAndUser(projectId, user);
 
-        cancelDeployService.cancelDeployProject(CancelDeployProjectReq.ofProjectId(projectId));
-        containerService.removeContainer(project);
+        try {
+            cancelDeployService.cancelDeployProject(CancelDeployProjectReq.ofProjectId(projectId));
+        } catch (Exception ignored) {}
+        try {
+            if (project.checkContainerProject()) {
+                containerService.removeContainer(project);
+            }
+        } catch (Exception ignored) {}
         processProjectFileService.deleteProjectFile(project);
         projectRepository.delete(project);
     }
