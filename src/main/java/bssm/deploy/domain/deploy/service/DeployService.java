@@ -3,9 +3,9 @@ package bssm.deploy.domain.deploy.service;
 import bssm.deploy.domain.deploy.presentation.dto.req.DeployProjectReq;
 import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.type.ProjectType;
+import bssm.deploy.domain.project.exception.NoSuchProjectFileException;
 import bssm.deploy.domain.project.service.ProjectProvider;
 import bssm.deploy.global.auth.CurrentUser;
-import bssm.deploy.global.error.exceptions.InternalServerException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ public class DeployService {
     @Transactional
     public void deployProject(DeployProjectReq req) throws IOException {
         Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
+        checkProjectFile(project);
         ProjectType projectType = project.getProjectType();
 
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
@@ -39,6 +40,12 @@ public class DeployService {
             deployNextJs(project.getId(), project.getDomainPrefix());
         }
         project.setDeploy(true);
+    }
+
+    private void checkProjectFile(Project project) {
+        if (project.getDataSize() <= 0) {
+            throw new NoSuchProjectFileException();
+        }
     }
 
     private void deploySingleHtmlFile(Long projectId, String domainPrefix) throws IOException {
