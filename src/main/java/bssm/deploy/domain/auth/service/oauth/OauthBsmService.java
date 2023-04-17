@@ -31,7 +31,6 @@ public class OauthBsmService {
 
     @Transactional
     public AuthTokenRes bsmOauthLogin(BsmOAuthReq req) throws IOException {
-
         BsmUserResource resource = getResource(req.getCode());
         User user = userFacade.findByIdOrNull(resource.getUserCode());
         user = signUpOrUpdate(user, resource);
