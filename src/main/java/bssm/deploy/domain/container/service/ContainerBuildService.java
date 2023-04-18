@@ -14,8 +14,8 @@ public class ContainerBuildService {
 
     private final LinuxContainerCommandService containerCommandService;
 
-    public void rebuildContainerAsync(Project project) throws IOException {
-        containerCommandService.rebuildContainerAsync(project.getId());
+    public void rebuildContainer(Project project) throws IOException {
+        containerCommandService.rebuildContainer(project.getId());
     }
 
 }

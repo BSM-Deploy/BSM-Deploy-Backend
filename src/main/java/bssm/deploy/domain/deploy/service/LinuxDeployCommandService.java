@@ -41,12 +41,12 @@ public class LinuxDeployCommandService implements DeployCommandService {
         executor.execute(command);
     }
 
-    public void deployNextJsAsync(long projectId, String domainPrefix) throws IOException {
+    public void deployNextJs(long projectId, String domainPrefix) throws IOException {
         CommandLine command = CommandLine.parse("sh " + DEPLOY_NEXT_JS + " " + projectId + " " + domainPrefix);
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
         executor.setWatchdog(new ExecuteWatchdog(MAX_DEPLOY_TIME));
-        executor.execute(command, new DefaultExecuteResultHandler());
+        executor.execute(command);
     }
 
 }

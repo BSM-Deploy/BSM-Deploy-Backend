@@ -32,12 +32,12 @@ public class LinuxContainerCommandService implements ContainerCommandService {
         return output;
     }
 
-    public void rebuildContainerAsync(long projectId) throws IOException {
+    public void rebuildContainer(long projectId) throws IOException {
         CommandLine command = CommandLine.parse("sh " + CONTAINER_REBUILD + " " + projectId);
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
         executor.setWatchdog(new ExecuteWatchdog(MAX_REBUILD_TIME));
-        executor.execute(command, new DefaultExecuteResultHandler());
+        executor.execute(command);
     }
 
     public void removeContainer(long projectId) throws IOException {

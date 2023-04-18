@@ -89,7 +89,7 @@ public class ProjectService {
         project.setDataSize(FileUtils.sizeOfDirectory(projectDir));
 
         if (project.checkContainerProject()) {
-            containerBuildService.rebuildContainerAsync(project);
+            containerBuildService.rebuildContainer(project);
         }
     }
 

@@ -61,7 +61,7 @@ public class DeployService {
     }
 
     private void deployNextJs(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployNextJsAsync(projectId, domainPrefix);
+        deployCommandService.deployNextJs(projectId, domainPrefix);
     }
 
 }
