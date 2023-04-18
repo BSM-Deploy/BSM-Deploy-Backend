@@ -1,7 +1,6 @@
 package bssm.deploy.domain.deploy.service;
 
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.springframework.beans.factory.annotation.Value;

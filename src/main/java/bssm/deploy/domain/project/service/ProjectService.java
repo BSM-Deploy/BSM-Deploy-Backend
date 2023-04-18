@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -62,7 +63,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectRes createProject(CreateProjectReq req) {
+    public ProjectRes createProject(CreateProjectReq req) throws IOException {
         User user = currentUser.getCachedUser();
         if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())
                 || reservedDomainPrefixRepository.existsById(req.getDomainPrefix())) {
@@ -70,6 +71,7 @@ public class ProjectService {
         }
         Project project = Project.create(user, req.getName(), req.getDomainPrefix(), req.getProjectType());
         project = projectRepository.save(project);
+        processProjectFileService.createProjectDir(project);
         return ProjectRes.create(project);
     }
 

@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Tag(name = "프로젝트")
 @RestController
 @RequestMapping("project")
@@ -46,7 +48,7 @@ public class ProjectController {
     })
     @Operation(summary = "프로젝트 생성")
     @PostMapping
-    public ProjectRes createProject(@Valid @RequestBody CreateProjectReq req) {
+    public ProjectRes createProject(@Valid @RequestBody CreateProjectReq req) throws IOException {
         return projectService.createProject(req);
     }
 

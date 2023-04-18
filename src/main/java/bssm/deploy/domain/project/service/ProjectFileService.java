@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,10 @@ public class ProjectFileService {
 
     @Value("${bsm-deploy.project-path.base}")
     private String PROJECT_BASE_RESOURCE_PATH;
+
+    public void createProjectDir(Project project) throws IOException {
+        projectCommandService.createProject(project.getId(), project.getProjectType());
+    }
 
     public File uploadProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
