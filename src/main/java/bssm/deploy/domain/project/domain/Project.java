@@ -1,6 +1,5 @@
 package bssm.deploy.domain.project.domain;
 
-import bssm.deploy.domain.container.exception.NoSuchContainerException;
 import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.user.domain.User;
 import jakarta.persistence.*;
@@ -58,6 +57,7 @@ public class Project {
     }
 
     public boolean checkContainerProject() {
-        return ProjectType.BUILT_NEXT_JS == projectType;
+        return ProjectType.BUILT_NEXT_JS == projectType
+                || ProjectType.BUILT_SPRING_JAR == projectType;
     }
 }

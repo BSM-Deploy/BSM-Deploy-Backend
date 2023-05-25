@@ -48,4 +48,12 @@ public class LinuxDeployCommandService implements DeployCommandService {
         executor.execute(command);
     }
 
+    public void deploySpringJar(long projectId, String domainPrefix) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_SPRING_JAR + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.setWatchdog(new ExecuteWatchdog(MAX_DEPLOY_TIME));
+        executor.execute(command);
+    }
+
 }

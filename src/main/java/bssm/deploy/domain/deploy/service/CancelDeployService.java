@@ -37,6 +37,9 @@ public class CancelDeployService {
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
             cancelDeployNextJs(project.getId());
         }
+        if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
+            cancelDeploySpringJar(project.getId());
+        }
         project.setDeploy(false);
     }
 
@@ -54,6 +57,10 @@ public class CancelDeployService {
 
     private void cancelDeployNextJs(Long projectId) throws IOException {
         cancelDeployCommandService.cancelDeployNextJs(projectId);
+    }
+
+    private void cancelDeploySpringJar(Long projectId) throws IOException {
+        cancelDeployCommandService.cancelDeploySpringJar(projectId);
     }
 
 }

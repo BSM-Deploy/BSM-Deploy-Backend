@@ -58,7 +58,7 @@ public class ProjectController {
             @ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음"),
             @ApiResponse(responseCode = "500")
     })
-    @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, 나머지는 압축된 zip 파일")
+    @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, BUILT_SPRING_JAR이면 jar 파일만, 나머지는 압축된 zip 파일")
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public void uploadProject(@ModelAttribute UploadProjectReq req) throws Exception {
         projectService.uploadProject(req);

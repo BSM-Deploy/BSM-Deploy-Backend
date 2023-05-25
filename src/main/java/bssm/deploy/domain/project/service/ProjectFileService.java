@@ -36,6 +36,9 @@ public class ProjectFileService {
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
             return uploadNextJsFile(tempProjectFile, projectDir);
         }
+        if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
+            return uploadSpringJarFile(tempProjectFile, projectDir);
+        }
         throw new InternalServerException();
     }
 
@@ -57,6 +60,12 @@ public class ProjectFileService {
 
     private File uploadNextJsFile(File tempProjectZipFile, File projectDir) throws Exception {
         projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
+        return projectDir;
+    }
+
+    private File uploadSpringJarFile(File tempProjectFile, File projectDir) throws Exception {
+        File newFile = new File(projectDir.getAbsoluteFile() + "/server.jar");
+        projectCommandService.moveFile(tempProjectFile, newFile);
         return projectDir;
     }
 

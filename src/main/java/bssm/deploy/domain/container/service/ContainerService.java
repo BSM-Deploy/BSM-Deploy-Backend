@@ -2,7 +2,6 @@ package bssm.deploy.domain.container.service;
 
 import bssm.deploy.domain.container.exception.NoSuchContainerException;
 import bssm.deploy.domain.project.domain.Project;
-import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.project.service.ProjectProvider;
 import bssm.deploy.domain.user.domain.User;
 import bssm.deploy.global.auth.CurrentUser;
@@ -32,10 +31,9 @@ public class ContainerService {
         if (!project.isDeploy()) {
             throw new NoSuchContainerException();
         }
-        if (ProjectType.BUILT_NEXT_JS == project.getProjectType()) {
-            return;
+        if (!project.checkContainerProject()) {
+            throw new NoSuchContainerException();
         }
-        throw new NoSuchContainerException();
     }
 
     public void removeContainer(Project project) throws IOException {

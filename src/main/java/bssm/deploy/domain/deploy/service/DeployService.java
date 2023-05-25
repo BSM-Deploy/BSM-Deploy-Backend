@@ -39,6 +39,9 @@ public class DeployService {
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
             deployNextJs(project.getId(), project.getDomainPrefix());
         }
+        if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
+            deploySpringJar(project.getId(), project.getDomainPrefix());
+        }
         project.setDeploy(true);
     }
 
@@ -62,6 +65,10 @@ public class DeployService {
 
     private void deployNextJs(Long projectId, String domainPrefix) throws IOException {
         deployCommandService.deployNextJs(projectId, domainPrefix);
+    }
+
+    private void deploySpringJar(Long projectId, String domainPrefix) throws IOException {
+        deployCommandService.deploySpringJar(projectId, domainPrefix);
     }
 
 }

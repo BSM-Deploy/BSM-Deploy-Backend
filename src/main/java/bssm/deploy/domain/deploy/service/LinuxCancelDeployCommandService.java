@@ -44,4 +44,11 @@ public class LinuxCancelDeployCommandService implements CancelDeployCommandServi
         executor.execute(command);
     }
 
+    public void cancelDeploySpringJar(long projectId) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_SPRING_JAR + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
+    }
+
 }
