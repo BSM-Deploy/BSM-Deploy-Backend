@@ -9,6 +9,7 @@ import bssm.deploy.domain.project.domain.repository.ProjectRepository;
 import bssm.deploy.domain.project.domain.repository.ReservedDomainPrefixRepository;
 import bssm.deploy.domain.project.exception.AlreadyExistDomainPrefixException;
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
+import bssm.deploy.domain.project.presentaion.dto.req.UpdateEnvVarReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
 import bssm.deploy.domain.user.domain.User;
@@ -35,7 +36,7 @@ public class ProjectService {
     private final CurrentUser currentUser;
     private final ProjectProvider projectProvider;
     private final ProjectFileValidateService projectFileValidateService;
-    private final ProjectFileService processProjectFileService;
+    private final ProjectFileService projectFileService;
     private final ContainerService containerService;
     private final ContainerBuildService containerBuildService;
     private final CancelDeployService cancelDeployService;
@@ -71,7 +72,7 @@ public class ProjectService {
         }
         Project project = Project.create(user, req.getName(), req.getDomainPrefix(), req.getProjectType());
         project = projectRepository.save(project);
-        processProjectFileService.createProjectDir(project);
+        projectFileService.createProjectDir(project);
         return ProjectRes.create(project);
     }
 
@@ -87,10 +88,10 @@ public class ProjectService {
         File tempProjectFile = new File(PROJECT_TEMP_RESOURCE_PATH + "/" + SecurityUtil.getRandomStr(16));
         file.transferTo(tempProjectFile);
 
-        processProjectFileService.uploadProjectFile(tempProjectFile, projectDir, project.getProjectType());
+        projectFileService.uploadProjectFile(tempProjectFile, projectDir, project.getProjectType());
         project.setDataSize(FileUtils.sizeOfDirectory(projectDir));
 
-        if (project.checkContainerProject()) {
+        if (project.isContainerProject()) {
             containerBuildService.rebuildContainer(project);
         }
     }
@@ -117,11 +118,21 @@ public class ProjectService {
             cancelDeployService.cancelDeployProject(CancelDeployProjectReq.ofProjectId(projectId));
         } catch (Exception ignored) {}
         try {
-            if (project.checkContainerProject()) {
+            if (project.isContainerProject()) {
                 containerService.removeContainer(project);
             }
         } catch (Exception ignored) {}
-        processProjectFileService.deleteProjectFile(project);
+        projectFileService.deleteProjectFile(project);
         projectRepository.delete(project);
+    }
+
+    @Transactional
+    public void updateEnvVar(UpdateEnvVarReq req) throws IOException {
+        User user = currentUser.getCachedUser();
+        Project project = projectProvider.findByIdAndUser(req.getProjectId(), user);
+        project.setEnvVar(req.getEnvVar());
+
+        File tempEnvVarFile = new File(PROJECT_TEMP_RESOURCE_PATH + "/" + SecurityUtil.getRandomStr(16));
+        projectFileService.applyEnvVarFile(tempEnvVarFile, project);
     }
 }

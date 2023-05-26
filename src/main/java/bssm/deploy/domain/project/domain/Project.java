@@ -37,6 +37,9 @@ public class Project {
     @Column(nullable = false)
     private long dataSize;
 
+    @Column(columnDefinition = "text")
+    private String envVar;
+
     public static Project create(User user, String name, String domainPrefix, ProjectType projectType) {
         Project project = new Project();
         project.user = user;
@@ -56,7 +59,11 @@ public class Project {
         this.dataSize = dataSize;
     }
 
-    public boolean checkContainerProject() {
+    public void setEnvVar(String envVar) {
+        this.envVar = envVar;
+    }
+
+    public boolean isContainerProject() {
         return ProjectType.BUILT_NEXT_JS == projectType
                 || ProjectType.BUILT_SPRING_JAR == projectType;
     }

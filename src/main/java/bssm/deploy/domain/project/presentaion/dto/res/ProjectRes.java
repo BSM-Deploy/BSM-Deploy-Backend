@@ -28,6 +28,9 @@ public class ProjectRes {
     @Schema(description = "프로젝트 전체 파일 크기")
     private Long dataSize;
 
+    @Schema(description = "Multi-line 환경 변수 문자열", nullable = true)
+    private String envVar;
+
     public static ProjectRes create(Project project) {
         ProjectRes res = new ProjectRes();
         res.id = project.getId();
@@ -36,6 +39,7 @@ public class ProjectRes {
         res.isDeploy = project.isDeploy();
         res.projectType = project.getProjectType();
         res.dataSize = project.getDataSize();
+        res.envVar = project.getEnvVar();
         return res;
     }
 }

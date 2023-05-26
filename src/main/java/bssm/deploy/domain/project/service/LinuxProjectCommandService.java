@@ -42,4 +42,11 @@ public class LinuxProjectCommandService implements ProjectCommandService {
         executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
         executor.execute(command);
     }
+
+    public void applyEnvVar(File tempEnvVarFile, long projectId, ProjectType projectType) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + APPLY_ENV_VAR + " " + projectId + " " + projectType.name() + " " + tempEnvVarFile.getAbsolutePath());
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
+    }
 }

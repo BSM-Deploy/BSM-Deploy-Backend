@@ -1,6 +1,7 @@
 package bssm.deploy.domain.project.presentaion;
 
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
+import bssm.deploy.domain.project.presentaion.dto.req.UpdateEnvVarReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
 import bssm.deploy.domain.project.service.ProjectService;
@@ -73,6 +74,17 @@ public class ProjectController {
     @DeleteMapping("{projectId}")
     public void deleteProject(@PathVariable Long projectId) throws Exception {
         projectService.deleteProject(projectId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음"),
+            @ApiResponse(responseCode = "500")
+    })
+    @Operation(summary = "환경변수 업데이트")
+    @PutMapping("env-var")
+    public void updateEnvVar(@RequestBody UpdateEnvVarReq req) throws IOException {
+        projectService.updateEnvVar(req);
     }
 
 }

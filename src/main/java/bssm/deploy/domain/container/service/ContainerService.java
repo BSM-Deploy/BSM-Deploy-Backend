@@ -31,7 +31,7 @@ public class ContainerService {
         if (!project.isDeploy()) {
             throw new NoSuchContainerException();
         }
-        if (!project.checkContainerProject()) {
+        if (!project.isContainerProject()) {
             throw new NoSuchContainerException();
         }
     }

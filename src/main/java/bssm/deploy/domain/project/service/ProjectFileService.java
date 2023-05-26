@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 @Service
@@ -72,5 +74,12 @@ public class ProjectFileService {
     public void deleteProjectFile(Project project) throws Exception {
         File projectDir = new File(PROJECT_BASE_RESOURCE_PATH + "/" + project.getId());
         projectCommandService.removeDir(projectDir);
+    }
+
+    public void applyEnvVarFile(File tempEnvVarFile, Project project) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempEnvVarFile));
+        writer.write(project.getEnvVar());
+        writer.close();
+        projectCommandService.applyEnvVar(tempEnvVarFile, project.getId(), project.getProjectType());
     }
 }
