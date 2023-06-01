@@ -51,4 +51,11 @@ public class LinuxCancelDeployCommandService implements CancelDeployCommandServi
         executor.execute(command);
     }
 
+    public void cancelDeployNodeJs(long projectId) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + CANCEL_DEPLOY_NODE_JS + " " + projectId);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.execute(command);
+    }
+
 }

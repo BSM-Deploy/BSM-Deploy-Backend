@@ -36,6 +36,10 @@ public class ProjectFileValidateService {
             validateBuiltSpringJar(file);
             return;
         }
+        if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
+            validateBuiltNodeJs(file);
+            return;
+        }
         throw new InternalServerException();
     }
 
@@ -57,5 +61,9 @@ public class ProjectFileValidateService {
 
     private void validateBuiltSpringJar(MultipartFile file) {
         FileValidateUtil.validateExtension(file.getOriginalFilename(), JAR);
+    }
+
+    private void validateBuiltNodeJs(MultipartFile file) {
+        FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
     }
 }

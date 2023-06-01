@@ -56,4 +56,12 @@ public class LinuxDeployCommandService implements DeployCommandService {
         executor.execute(command);
     }
 
+    public void deployNodeJs(long projectId, String domainPrefix) throws IOException {
+        CommandLine command = CommandLine.parse("sh " + DEPLOY_NODE_JS + " " + projectId + " " + domainPrefix);
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
+        executor.setWatchdog(new ExecuteWatchdog(MAX_DEPLOY_TIME));
+        executor.execute(command);
+    }
+
 }

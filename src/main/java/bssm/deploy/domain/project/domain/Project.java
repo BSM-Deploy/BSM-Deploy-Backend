@@ -65,6 +65,7 @@ public class Project {
 
     public boolean isContainerProject() {
         return ProjectType.BUILT_NEXT_JS == projectType
-                || ProjectType.BUILT_SPRING_JAR == projectType;
+                || ProjectType.BUILT_SPRING_JAR == projectType
+                || ProjectType.BUILT_NODE_JS == projectType;
     }
 }
