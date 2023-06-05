@@ -1,10 +1,12 @@
 package bssm.deploy.domain.container.service;
 
+import bssm.deploy.domain.container.exception.ContainerBuildException;
 import org.apache.commons.exec.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import static bssm.deploy.domain.container.constant.ScriptFileConstant.*;
 
@@ -32,12 +34,24 @@ public class LinuxContainerCommandService implements ContainerCommandService {
         return output;
     }
 
-    public void rebuildContainer(long projectId) throws IOException {
+    public void rebuildContainer(long projectId) throws IOException, InterruptedException {
+        ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
+        PumpStreamHandler streamHandler = new PumpStreamHandler(null, errorStream);
+        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+
         CommandLine command = CommandLine.parse("sh " + CONTAINER_REBUILD + " " + projectId);
         DefaultExecutor executor = new DefaultExecutor();
         executor.setWorkingDirectory(new File(SCRIPT_BASE_PATH));
         executor.setWatchdog(new ExecuteWatchdog(MAX_REBUILD_TIME));
-        executor.execute(command);
+        executor.setStreamHandler(streamHandler);
+        executor.execute(command, resultHandler);
+        resultHandler.waitFor();
+
+        boolean isError = resultHandler.getExitValue() != 0;
+        if (isError) {
+            String errorLog = errorStream.toString(StandardCharsets.UTF_8);
+            throw new ContainerBuildException(errorLog);
+        }
     }
 
     public void removeContainer(long projectId) throws IOException {

@@ -57,7 +57,7 @@ public class ProjectController {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "400", description = "파일 확장자가 올바르지 않음"),
             @ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없음"),
-            @ApiResponse(responseCode = "500")
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류, 컨테이너를 빌드하는데 실패함 (에러 로그가 나오니까 유저에게 보여줘야 함)")
     })
     @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, BUILT_SPRING_JAR이면 jar 파일만, 나머지는 압축된 zip 파일")
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
