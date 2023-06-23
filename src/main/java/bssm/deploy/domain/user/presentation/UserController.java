@@ -15,7 +15,7 @@ public class UserController {
 
     private final CurrentUser currentUser;
 
-    @Operation(summary = "내 계정 조회", description = "모든 데이터 제공")
+    @Operation(summary = "내 계정 조회")
     @GetMapping
     public UserRes getUserInfo() {
         return UserRes.create(currentUser.getUser());

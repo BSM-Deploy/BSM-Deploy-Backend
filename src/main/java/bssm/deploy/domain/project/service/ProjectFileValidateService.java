@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 import static bssm.deploy.domain.project.constant.ProjectFileConstant.*;
 
 @Service
@@ -15,55 +17,27 @@ import static bssm.deploy.domain.project.constant.ProjectFileConstant.*;
 @RequiredArgsConstructor
 public class ProjectFileValidateService {
 
+    private static final List<ProjectType> zipFileProjects = List.of(new ProjectType[]{
+            ProjectType.MULTIPLE_FILE,
+            ProjectType.BUILT_REACT_JS,
+            ProjectType.BUILT_NEXT_JS,
+            ProjectType.BUILT_NODE_JS
+    });
+
     public void validateFile(MultipartFile file, ProjectType projectType) {
+        if (zipFileProjects.contains(projectType)) {
+            FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
+            return;
+        }
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            validateSingleHtml(file);
-            return;
-        }
-        if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            validateMultipleHtml(file);
-            return;
-        }
-        if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            validateBuiltReactJs(file);
-            return;
-        }
-        if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            validateBuiltNextJs(file);
+            FileValidateUtil.validateExtension(file.getOriginalFilename(), HTML);
             return;
         }
         if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
-            validateBuiltSpringJar(file);
-            return;
-        }
-        if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
-            validateBuiltNodeJs(file);
+            FileValidateUtil.validateExtension(file.getOriginalFilename(), JAR);
             return;
         }
         throw new InternalServerException();
     }
 
-    private void validateSingleHtml(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), HTML);
-    }
-
-    private void validateMultipleHtml(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
-    }
-
-    private void validateBuiltReactJs(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
-    }
-
-    private void validateBuiltNextJs(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
-    }
-
-    private void validateBuiltSpringJar(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), JAR);
-    }
-
-    private void validateBuiltNodeJs(MultipartFile file) {
-        FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
-    }
 }

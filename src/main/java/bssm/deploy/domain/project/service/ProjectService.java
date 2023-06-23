@@ -122,7 +122,7 @@ public class ProjectService {
                 containerService.removeContainer(project);
             }
         } catch (Exception ignored) {}
-        projectFileService.deleteProjectFile(project);
+        projectFileService.deleteProject(project);
         projectRepository.delete(project);
     }
 

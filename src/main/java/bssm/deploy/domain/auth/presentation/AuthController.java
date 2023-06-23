@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @Tag(name = "인증")
 @RestController
 @RequestMapping("auth")
@@ -59,7 +61,7 @@ public class AuthController {
     })
     @Operation(summary = "BSM OAuth 로그인")
     @PostMapping("/oauth/bsm")
-    public AuthTokenRes bsmOauth(@Validated @RequestBody BsmOAuthReq req) throws Exception {
+    public AuthTokenRes bsmOauth(@Validated @RequestBody BsmOAuthReq req) throws IOException {
         return oauthBsmService.bsmOauthLogin(req);
     }
 

@@ -43,7 +43,7 @@ public class DeployService {
             deploySpringJar(project.getId(), project.getDomainPrefix());
         }
         if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
-            deploySpringJar(project.getId(), project.getDomainPrefix());
+            deployNodeJs(project.getId(), project.getDomainPrefix());
         }
         project.setDeploy(true);
     }

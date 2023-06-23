@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,65 +22,48 @@ public class ProjectFileService {
     @Value("${bsm-deploy.project-path.base}")
     private String PROJECT_BASE_RESOURCE_PATH;
 
+    private static final List<ProjectType> zipFileProjects = List.of(new ProjectType[]{
+            ProjectType.MULTIPLE_FILE,
+            ProjectType.BUILT_REACT_JS,
+            ProjectType.BUILT_NEXT_JS,
+            ProjectType.BUILT_NODE_JS
+    });
+
     public void createProjectDir(Project project) throws IOException {
         projectCommandService.createProject(project.getId(), project.getProjectType());
     }
 
-    public File uploadProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
+    public void uploadProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
+        if (zipFileProjects.contains(projectType)) {
+            extractZip(tempProjectFile, projectDir);
+            return;
+        }
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            return uploadSingleHtmlFile(tempProjectFile, projectDir);
-        }
-        if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            return uploadMultipleFile(tempProjectFile, projectDir);
-        }
-        if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            return uploadReactJsFile(tempProjectFile, projectDir);
-        }
-        if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            return uploadNextJsFile(tempProjectFile, projectDir);
+            uploadSingleHtml(tempProjectFile, projectDir);
+            return;
         }
         if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
-            return uploadSpringJarFile(tempProjectFile, projectDir);
-        }
-        if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
-            return uploadNodeJsFile(tempProjectFile, projectDir);
+            uploadSpringJar(tempProjectFile, projectDir);
+            return;
         }
         throw new InternalServerException();
     }
 
-    private File uploadSingleHtmlFile(File tempProjectFile, File projectDir) throws Exception {
+    private void extractZip(File tempProjectZipFile, File projectDir) throws Exception {
+        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
+    }
+
+    private void uploadSingleHtml(File tempProjectFile, File projectDir) throws Exception {
         File newFile = new File(projectDir.getAbsoluteFile() + "/index.html");
         projectCommandService.moveFile(tempProjectFile, newFile);
-        return newFile;
     }
 
-    private File uploadMultipleFile(File tempProjectZipFile, File projectDir) throws Exception {
-        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
-        return projectDir;
-    }
-
-    private File uploadReactJsFile(File tempProjectZipFile, File projectDir) throws Exception {
-        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
-        return projectDir;
-    }
-
-    private File uploadNextJsFile(File tempProjectZipFile, File projectDir) throws Exception {
-        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
-        return projectDir;
-    }
-
-    private File uploadSpringJarFile(File tempProjectFile, File projectDir) throws Exception {
+    private void uploadSpringJar(File tempProjectFile, File projectDir) throws Exception {
         File newFile = new File(projectDir.getAbsoluteFile() + "/server.jar");
         projectCommandService.moveFile(tempProjectFile, newFile);
-        return projectDir;
     }
 
-    private File uploadNodeJsFile(File tempProjectZipFile, File projectDir) throws Exception {
-        projectCommandService.extractZipFile(tempProjectZipFile, projectDir);
-        return projectDir;
-    }
-
-    public void deleteProjectFile(Project project) throws Exception {
+    public void deleteProject(Project project) throws Exception {
         File projectDir = new File(PROJECT_BASE_RESOURCE_PATH + "/" + project.getId());
         projectCommandService.removeDir(projectDir);
     }
@@ -90,4 +74,5 @@ public class ProjectFileService {
         writer.close();
         projectCommandService.applyEnvVar(tempEnvVarFile, project.getId(), project.getProjectType());
     }
+
 }
