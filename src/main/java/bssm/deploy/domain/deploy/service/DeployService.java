@@ -26,24 +26,26 @@ public class DeployService {
         Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
         checkProjectFile(project);
         ProjectType projectType = project.getProjectType();
+        Long projectId = project.getId();
+        String domainPrefix = project.getDomainPrefix();
 
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            deploySingleHtmlFile(project.getId(), project.getDomainPrefix());
+            deployCommandService.deploySingleHtml(projectId, domainPrefix);
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            deployMultipleFile(project.getId(), project.getDomainPrefix());
+            deployCommandService.deployMultipleFile(projectId, domainPrefix);
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            deployReactJs(project.getId(), project.getDomainPrefix());
+            deployCommandService.deployReactJs(projectId, domainPrefix);
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            deployNextJs(project.getId(), project.getDomainPrefix());
+            deployCommandService.deployNextJs(projectId, domainPrefix);
         }
         if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
-            deploySpringJar(project.getId(), project.getDomainPrefix());
+        deployCommandService.deploySpringJar(projectId, domainPrefix);
         }
         if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
-            deployNodeJs(project.getId(), project.getDomainPrefix());
+            deployCommandService.deployNodeJs(projectId, domainPrefix);
         }
         project.setDeploy(true);
     }
@@ -52,30 +54,6 @@ public class DeployService {
         if (project.getDataSize() <= 0) {
             throw new NoSuchProjectFileException();
         }
-    }
-
-    private void deploySingleHtmlFile(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deploySingleHtml(projectId, domainPrefix);
-    }
-
-    private void deployMultipleFile(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployMultipleFile(projectId, domainPrefix);
-    }
-
-    private void deployReactJs(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployReactJs(projectId, domainPrefix);
-    }
-
-    private void deployNextJs(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployNextJs(projectId, domainPrefix);
-    }
-
-    private void deploySpringJar(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deploySpringJar(projectId, domainPrefix);
-    }
-
-    private void deployNodeJs(Long projectId, String domainPrefix) throws IOException {
-        deployCommandService.deployNodeJs(projectId, domainPrefix);
     }
 
 }

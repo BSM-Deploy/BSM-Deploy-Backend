@@ -23,51 +23,28 @@ public class CancelDeployService {
     @Transactional
     public void cancelDeployProject(CancelDeployProjectReq req) throws IOException {
         Project project = projectProvider.findByIdAndUser(req.getProjectId(), currentUser.getUser());
+        Long projectId = project.getId();
         ProjectType projectType = project.getProjectType();
 
         if (projectType.equals(ProjectType.SINGLE_HTML)) {
-            cancelDeploySingleHtmlFile(project.getId());
+            cancelDeployCommandService.cancelDeploySingleHtml(projectId);
         }
         if (projectType.equals(ProjectType.MULTIPLE_FILE)) {
-            cancelDeployMultipleFile(project.getId());
+            cancelDeployCommandService.cancelDeployMultipleFile(projectId);
         }
         if (projectType.equals(ProjectType.BUILT_REACT_JS)) {
-            cancelDeployReactJs(project.getId());
+            cancelDeployCommandService.cancelDeployMultipleFile(projectId);
         }
         if (projectType.equals(ProjectType.BUILT_NEXT_JS)) {
-            cancelDeployNextJs(project.getId());
+            cancelDeployCommandService.cancelDeployNextJs(projectId);
         }
         if (projectType.equals(ProjectType.BUILT_SPRING_JAR)) {
-            cancelDeploySpringJar(project.getId());
+            cancelDeployCommandService.cancelDeploySpringJar(projectId);
         }
         if (projectType.equals(ProjectType.BUILT_NODE_JS)) {
-            cancelDeployNodeJs(project.getId());
+            cancelDeployCommandService.cancelDeployNodeJs(projectId);
         }
         project.setDeploy(false);
-    }
-
-    private void cancelDeploySingleHtmlFile(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeploySingleHtml(projectId);
-    }
-
-    private void cancelDeployMultipleFile(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeployMultipleFile(projectId);
-    }
-
-    private void cancelDeployReactJs(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeployMultipleFile(projectId);
-    }
-
-    private void cancelDeployNextJs(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeployNextJs(projectId);
-    }
-
-    private void cancelDeploySpringJar(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeploySpringJar(projectId);
-    }
-
-    private void cancelDeployNodeJs(Long projectId) throws IOException {
-        cancelDeployCommandService.cancelDeployNodeJs(projectId);
     }
 
 }
