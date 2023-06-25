@@ -61,7 +61,7 @@ public class ProjectController {
     })
     @Operation(summary = "프로젝트 업로드", description = "file 속성에는 SINGLE_HTML이면 html 파일만, BUILT_SPRING_JAR이면 jar 파일만, 나머지는 압축된 zip 파일")
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void uploadProject(@ModelAttribute UploadProjectReq req) throws Exception {
+    public void uploadProject(@Valid @ModelAttribute UploadProjectReq req) throws Exception {
         projectService.uploadProject(req);
     }
 
@@ -83,7 +83,7 @@ public class ProjectController {
     })
     @Operation(summary = "환경변수 업데이트")
     @PutMapping("env-var")
-    public void updateEnvVar(@RequestBody UpdateEnvVarReq req) throws IOException {
+    public void updateEnvVar(@Valid @RequestBody UpdateEnvVarReq req) throws IOException {
         projectService.updateEnvVar(req);
     }
 
