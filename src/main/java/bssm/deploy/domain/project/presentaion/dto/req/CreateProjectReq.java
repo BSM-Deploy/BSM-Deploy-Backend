@@ -23,4 +23,7 @@ public class CreateProjectReq {
     @NotNull
     private ProjectType projectType;
 
+    public String getDomainPrefix() {
+        return domainPrefix.toLowerCase();
+    }
 }
