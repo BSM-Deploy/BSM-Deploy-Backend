@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 import static bssm.deploy.domain.project.constant.ProjectFileConstant.*;
 
 @Service
@@ -17,15 +15,8 @@ import static bssm.deploy.domain.project.constant.ProjectFileConstant.*;
 @RequiredArgsConstructor
 public class ProjectFileValidateService {
 
-    private static final List<ProjectType> zipFileProjects = List.of(new ProjectType[]{
-            ProjectType.MULTIPLE_FILE,
-            ProjectType.BUILT_REACT_JS,
-            ProjectType.BUILT_NEXT_JS,
-            ProjectType.BUILT_NODE_JS
-    });
-
     public void validateFile(MultipartFile file, ProjectType projectType) {
-        if (zipFileProjects.contains(projectType)) {
+        if (ZIP_FILE_PROJECTS.contains(projectType)) {
             FileValidateUtil.validateExtension(file.getOriginalFilename(), ZIP);
             return;
         }

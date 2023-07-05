@@ -11,7 +11,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+
+import static bssm.deploy.domain.project.constant.ProjectFileConstant.ZIP_FILE_PROJECTS;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +23,12 @@ public class ProjectFileService {
     @Value("${bsm-deploy.project-path.base}")
     private String PROJECT_BASE_RESOURCE_PATH;
 
-    private static final List<ProjectType> zipFileProjects = List.of(new ProjectType[]{
-            ProjectType.MULTIPLE_FILE,
-            ProjectType.BUILT_REACT_JS,
-            ProjectType.BUILT_NEXT_JS,
-            ProjectType.BUILT_NODE_JS
-    });
-
     public void createProjectDir(Project project) throws IOException {
         projectCommandService.createProject(project.getId(), project.getProjectType());
     }
 
     public void uploadProjectFile(File tempProjectFile, File projectDir, ProjectType projectType) throws Exception {
-        if (zipFileProjects.contains(projectType)) {
+        if (ZIP_FILE_PROJECTS.contains(projectType)) {
             extractZip(tempProjectFile, projectDir);
             return;
         }

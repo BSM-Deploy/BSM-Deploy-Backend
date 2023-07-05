@@ -8,6 +8,7 @@ import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.repository.ProjectRepository;
 import bssm.deploy.domain.project.domain.repository.ReservedDomainPrefixRepository;
 import bssm.deploy.domain.project.exception.AlreadyExistDomainPrefixException;
+import bssm.deploy.domain.project.exception.MaxProjectsExceededException;
 import bssm.deploy.domain.project.presentaion.dto.req.CreateProjectReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UpdateEnvVarReq;
 import bssm.deploy.domain.project.presentaion.dto.req.UploadProjectReq;
@@ -16,6 +17,7 @@ import bssm.deploy.domain.user.domain.User;
 import bssm.deploy.global.auth.CurrentUser;
 import bssm.deploy.global.dto.ListRes;
 import bssm.deploy.global.error.exceptions.FileUploadException;
+import bssm.deploy.global.utils.ProjectUtil;
 import bssm.deploy.global.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static bssm.deploy.domain.project.constant.ProjectConstant.CONTAINER_PROJECTS;
+import static bssm.deploy.domain.project.constant.ProjectConstant.MAX_CONTAINER_PROJECTS;
 
 @Service
 @Transactional(readOnly = true)
@@ -66,10 +71,15 @@ public class ProjectService {
     @Transactional
     public ProjectRes createProject(CreateProjectReq req) throws IOException {
         User user = currentUser.getCachedUser();
+        if (ProjectUtil.isContainerProject(req.getProjectType())
+                && projectRepository.countByUserAndProjectTypeIn(user, CONTAINER_PROJECTS) >= MAX_CONTAINER_PROJECTS) {
+            throw new MaxProjectsExceededException();
+        }
         if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())
-                || reservedDomainPrefixRepository.existsById(req.getDomainPrefix())) {
+                || reservedDomainPrefixRepository.existsByDomainPrefix(req.getDomainPrefix())) {
             throw new AlreadyExistDomainPrefixException();
         }
+
         Project project = Project.create(user, req.getName(), req.getDomainPrefix(), req.getProjectType());
         project = projectRepository.save(project);
         projectFileService.createProjectDir(project);
