@@ -2,6 +2,7 @@ package bssm.deploy.domain.project.domain;
 
 import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.user.domain.User;
+import bssm.deploy.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Project {
+public class Project extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,10 +58,12 @@ public class Project {
 
     public void setDataSize(long dataSize) {
         this.dataSize = dataSize;
+        this.updateModifiedAt();
     }
 
     public void setEnvVar(String envVar) {
         this.envVar = envVar;
+        this.updateModifiedAt();
     }
 
     public boolean isContainerProject() {
