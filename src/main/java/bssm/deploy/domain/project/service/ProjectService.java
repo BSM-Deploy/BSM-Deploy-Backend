@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static bssm.deploy.domain.project.constant.ProjectConstant.CONTAINER_PROJECTS;
-import static bssm.deploy.domain.project.constant.ProjectConstant.MAX_CONTAINER_PROJECTS;
 
 @Service
 @Transactional(readOnly = true)
@@ -70,10 +69,10 @@ public class ProjectService {
 
     @Transactional
     public ProjectRes createProject(CreateProjectReq req) throws IOException {
-        User user = currentUser.getCachedUser();
+        User user = currentUser.getUser();
         if (ProjectUtil.isContainerProject(req.getProjectType())
-                && projectRepository.countByUserAndProjectTypeIn(user, CONTAINER_PROJECTS) >= MAX_CONTAINER_PROJECTS) {
-            throw new MaxProjectsExceededException();
+                && projectRepository.countByUserAndProjectTypeIn(user, CONTAINER_PROJECTS) >= user.getMaxContainerProjects()) {
+            throw new MaxProjectsExceededException(user.getMaxContainerProjects());
         }
         if (projectRepository.existsByDomainPrefix(req.getDomainPrefix())
                 || reservedDomainPrefixRepository.existsByDomainPrefix(req.getDomainPrefix())) {

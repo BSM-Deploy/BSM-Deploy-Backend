@@ -11,6 +11,4 @@ public class ProjectConstant {
             ProjectType.BUILT_NEXT_JS,
             ProjectType.BUILT_SPRING_JAR
     });
-
-    public static final short MAX_CONTAINER_PROJECTS = 5;
 }

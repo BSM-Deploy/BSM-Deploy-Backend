@@ -21,11 +21,15 @@ public class User extends BaseTimeEntity {
     @Column(name = "profile_img")
     private String profileImg;
 
+    @Column(name = "max_container_projects", nullable = false)
+    private Short maxContainerProjects;
+
     public static User create(UserCache userCache) {
         User user = new User();
         user.id = userCache.getId();
         user.nickname = userCache.getNickname();
         user.profileImg = userCache.getProfileImg();
+        user.maxContainerProjects = userCache.getMaxContainerProjects();
         return user;
     }
 
@@ -34,6 +38,7 @@ public class User extends BaseTimeEntity {
         user.id = userCode;
         user.nickname = nickname;
         user.profileImg = profileImg;
+        user.maxContainerProjects = 5;
         return user;
     }
 

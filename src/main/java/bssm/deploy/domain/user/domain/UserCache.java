@@ -16,12 +16,14 @@ public class UserCache extends BaseTimeEntity {
     private Long id;
     private String nickname;
     private String profileImg;
+    private Short maxContainerProjects;
 
     public static UserCache create(User user) {
         UserCache userCache = new UserCache();
         userCache.id = user.getId();
         userCache.nickname = user.getNickname();
         userCache.profileImg = user.getProfileImg();
+        userCache.maxContainerProjects = user.getMaxContainerProjects();
         return userCache;
     }
 
