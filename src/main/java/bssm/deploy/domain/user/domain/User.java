@@ -1,5 +1,6 @@
 package bssm.deploy.domain.user.domain;
 
+import bssm.deploy.domain.user.domain.type.UserAuthority;
 import bssm.deploy.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,6 +22,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "profile_img")
     private String profileImg;
 
+    @Column(nullable = false, length = 12)
+    @Enumerated(EnumType.STRING)
+    private UserAuthority authority;
+
     @Column(name = "max_container_projects", nullable = false)
     private Short maxContainerProjects;
 
@@ -30,6 +35,7 @@ public class User extends BaseTimeEntity {
         user.nickname = userCache.getNickname();
         user.profileImg = userCache.getProfileImg();
         user.maxContainerProjects = userCache.getMaxContainerProjects();
+        user.authority = userCache.getAuthority();
         return user;
     }
 
@@ -38,6 +44,7 @@ public class User extends BaseTimeEntity {
         user.id = userCode;
         user.nickname = nickname;
         user.profileImg = profileImg;
+        user.authority = UserAuthority.USER;
         user.maxContainerProjects = 5;
         return user;
     }

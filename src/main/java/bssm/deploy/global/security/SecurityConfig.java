@@ -1,7 +1,9 @@
 package bssm.deploy.global.security;
 
+import bssm.deploy.domain.user.domain.type.UserAuthority;
 import bssm.deploy.global.auth.AuthFilterExceptionHandler;
 import bssm.deploy.global.error.GeneralErrorResponse;
+import bssm.deploy.global.error.exceptions.ForbiddenException;
 import bssm.deploy.global.error.exceptions.UnAuthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,6 +41,17 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (req, res, e) -> {
+            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            res.setContentType("application/json;charset=UTF-8");
+            res.getWriter().write(objectMapper.writeValueAsString(new GeneralErrorResponse(new ForbiddenException())));
+            res.getWriter().flush();
+            res.getWriter().close();
+        };
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .httpBasic().disable()
@@ -48,9 +62,11 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                .requestMatchers( "/admin/**").hasRole(UserAuthority.ADMIN.name())
                 .requestMatchers(HttpMethod.POST, "/auth/oauth/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/auth/token/refresh").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/auth/logout").permitAll()

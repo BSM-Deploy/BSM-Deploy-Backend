@@ -26,6 +26,9 @@ public class AuthDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        if (user != null) {
+            authorities.add(user.getAuthority().toAuthority());
+        }
         return authorities;
     }
 

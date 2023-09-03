@@ -1,5 +1,6 @@
 package bssm.deploy.domain.user.domain;
 
+import bssm.deploy.domain.user.domain.type.UserAuthority;
 import bssm.deploy.global.entity.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class UserCache extends BaseTimeEntity {
     private Long id;
     private String nickname;
     private String profileImg;
+    private UserAuthority authority;
     private Short maxContainerProjects;
 
     public static UserCache create(User user) {
@@ -23,6 +25,7 @@ public class UserCache extends BaseTimeEntity {
         userCache.id = user.getId();
         userCache.nickname = user.getNickname();
         userCache.profileImg = user.getProfileImg();
+        userCache.authority = user.getAuthority();
         userCache.maxContainerProjects = user.getMaxContainerProjects();
         return userCache;
     }
