@@ -26,6 +26,10 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "500", content = @Content)
+    })
     @Operation(summary = "내 프로젝트 리스트 조회")
     @GetMapping
     public ListRes<ProjectRes> findProjectList() {
@@ -34,7 +38,8 @@ public class ProjectController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "404", content = @Content)
+            @ApiResponse(responseCode = "404", content = @Content),
+            @ApiResponse(responseCode = "500", content = @Content)
     })
     @Operation(summary = "내 프로젝트 단건 조회")
     @GetMapping("{projectId}")

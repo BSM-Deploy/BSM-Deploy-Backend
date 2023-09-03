@@ -30,4 +30,8 @@ public class ProjectProvider {
     public List<Project> findProjectList(User user) {
         return projectRepository.findAllByUser(user);
     }
+
+    public List<Project> findProjectList() {
+        return projectRepository.findAll();
+    }
 }

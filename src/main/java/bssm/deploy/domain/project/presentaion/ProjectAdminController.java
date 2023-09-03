@@ -3,6 +3,7 @@ package bssm.deploy.domain.project.presentaion;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
 import bssm.deploy.domain.project.service.ProjectAdminService;
 import bssm.deploy.domain.project.service.ProjectService;
+import bssm.deploy.global.dto.ListRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,12 +25,25 @@ public class ProjectAdminController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "404", content = @Content)
+            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "404", content = @Content),
+            @ApiResponse(responseCode = "500", content = @Content)
     })
     @Operation(summary = "프로젝트 단건 조회")
     @GetMapping("{projectId}")
     public ProjectRes findProject(@PathVariable Long projectId) {
         return projectAdminService.findProject(projectId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "403", content = @Content),
+            @ApiResponse(responseCode = "500", content = @Content)
+    })
+    @Operation(summary = "프로젝트 리스트 조회")
+    @GetMapping
+    public ListRes<ProjectRes> findProjectList() {
+        return projectAdminService.findProjectList();
     }
 
 }
