@@ -31,7 +31,7 @@ public class ProjectProvider {
         return projectRepository.findAllByUser(user);
     }
 
-    public List<Project> findProjectList() {
-        return projectRepository.findAll();
+    public List<Project> findProjectList(Long userId, boolean orderRecent) {
+        return projectRepository.findProjectList(userId, orderRecent);
     }
 }

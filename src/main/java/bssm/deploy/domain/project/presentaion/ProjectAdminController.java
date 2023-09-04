@@ -1,8 +1,8 @@
 package bssm.deploy.domain.project.presentaion;
 
+import bssm.deploy.domain.project.presentaion.dto.req.admin.FindProjectListAdminReq;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
 import bssm.deploy.domain.project.service.ProjectAdminService;
-import bssm.deploy.domain.project.service.ProjectService;
 import bssm.deploy.global.dto.ListRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,7 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,8 +45,8 @@ public class ProjectAdminController {
     })
     @Operation(summary = "프로젝트 리스트 조회")
     @GetMapping
-    public ListRes<ProjectRes> findProjectList() {
-        return projectAdminService.findProjectList();
+    public ListRes<ProjectRes> findProjectList(@Validated @ParameterObject @ModelAttribute FindProjectListAdminReq req) {
+        return projectAdminService.findProjectList(req);
     }
 
 }

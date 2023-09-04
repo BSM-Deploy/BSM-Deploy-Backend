@@ -1,6 +1,7 @@
 package bssm.deploy.domain.project.service;
 
 import bssm.deploy.domain.project.domain.Project;
+import bssm.deploy.domain.project.presentaion.dto.req.admin.FindProjectListAdminReq;
 import bssm.deploy.domain.project.presentaion.dto.res.ProjectRes;
 import bssm.deploy.global.dto.ListRes;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class ProjectAdminService {
         return ProjectRes.create(project);
     }
 
-    public ListRes<ProjectRes> findProjectList() {
-        List<ProjectRes> projectResList = projectProvider.findProjectList().stream()
+    public ListRes<ProjectRes> findProjectList(FindProjectListAdminReq req) {
+        List<ProjectRes> projectResList = projectProvider.findProjectList(req.getUserId(), req.isOrderRecent()).stream()
                 .map(ProjectRes::create)
                 .toList();
         return ListRes.create(projectResList);
