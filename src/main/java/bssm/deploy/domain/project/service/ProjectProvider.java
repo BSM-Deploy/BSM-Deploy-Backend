@@ -2,6 +2,7 @@ package bssm.deploy.domain.project.service;
 
 import bssm.deploy.domain.project.domain.Project;
 import bssm.deploy.domain.project.domain.repository.ProjectRepository;
+import bssm.deploy.domain.project.domain.type.ProjectType;
 import bssm.deploy.domain.project.exception.NoSuchProjectException;
 import bssm.deploy.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class ProjectProvider {
         return projectRepository.findAllByUser(user);
     }
 
-    public List<Project> findProjectList(Long userId, boolean orderRecent) {
-        return projectRepository.findProjectList(userId, orderRecent);
+    public List<Project> findProjectList(Long userId, ProjectType projectType, boolean orderRecent) {
+        return projectRepository.findProjectList(userId, projectType, orderRecent);
     }
 }

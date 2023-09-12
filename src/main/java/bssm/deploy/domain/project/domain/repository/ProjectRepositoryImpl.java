@@ -1,6 +1,7 @@
 package bssm.deploy.domain.project.domain.repository;
 
 import bssm.deploy.domain.project.domain.Project;
+import bssm.deploy.domain.project.domain.type.ProjectType;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,10 +18,11 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Project> findProjectList(Long userId, boolean orderRecent) {
+    public List<Project> findProjectList(Long userId, ProjectType projectType, boolean orderRecent) {
         return jpaQueryFactory.selectFrom(project)
                 .where(
-                        userIdEq(userId)
+                        userIdEq(userId),
+                        projectTypeEq(projectType)
                 )
                 .orderBy(
                         modifyDateOrder(orderRecent)
@@ -33,6 +35,13 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
             return null;
         }
         return project.user.id.eq(userId);
+    }
+
+    private BooleanExpression projectTypeEq(ProjectType projectType) {
+        if (projectType == null) {
+            return null;
+        }
+        return project.projectType.eq(projectType);
     }
 
     private OrderSpecifier<LocalDateTime> modifyDateOrder(boolean orderRecent) {

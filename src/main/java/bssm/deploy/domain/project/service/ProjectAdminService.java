@@ -23,7 +23,7 @@ public class ProjectAdminService {
     }
 
     public ListRes<ProjectRes> findProjectList(FindProjectListAdminReq req) {
-        List<ProjectRes> projectResList = projectProvider.findProjectList(req.getUserId(), req.isOrderRecent()).stream()
+        List<ProjectRes> projectResList = projectProvider.findProjectList(req.getUserId(), req.getProjectType(), req.isOrderRecent()).stream()
                 .map(ProjectRes::create)
                 .toList();
         return ListRes.create(projectResList);
